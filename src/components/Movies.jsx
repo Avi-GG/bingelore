@@ -7,14 +7,16 @@ export default function Movies() {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		fetch("/api/movies") // 👈 ONLY change that matters
-			.then((res) => res.json())
-			.then((data) => {
-				setMovies(data.results || []);
-			})
-			.catch((err) => console.error(err))
-			.finally(() => setLoading(false));
+		fetchMovies();
 	}, []);
+
+	const fetchMovies = async () => {
+		const response = await fetch(`/api/tmdb?path=movie/popular`);
+		const data = await response.json();
+		console.log(data.results);
+		setMovies(data.results);
+		setLoading(false);
+	};
 
 	if (loading) return <p>Loading...</p>;
 
